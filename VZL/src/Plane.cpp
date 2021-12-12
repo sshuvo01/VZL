@@ -1,0 +1,32 @@
+
+#include "Plane.h"
+#include <algorithm>
+
+namespace vzl
+{
+
+double Plane::Intersection(const Ray& theRay) const
+{
+    double denom = theRay.GetDirection() * m_Normal;
+    if (denom == 0.0)
+    {
+        return -1.0;
+    }
+    double numer = -(theRay.GetPosition() - m_PointOnPlane) * m_Normal;
+    double t = numer / denom;
+    if(t < 0.0)
+    {
+        return -1.0;
+    }
+    
+    return t;
+}
+
+Color Plane::Shade(const Vector& point, const Light& light) const
+{
+    Vector lightDir = (light.GetPosition() - point).unitvector();
+    float reflectivity = std::max(m_Normal * lightDir, 0.0);
+    return GetColor() * light.GetColor() * reflectivity;
+}
+
+}// namespace vzl
