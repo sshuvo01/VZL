@@ -25,6 +25,7 @@ public:
 
     double Intersection(const Ray& theRay) const override;
     Color Shade(const Vector& point, const Light& light) const override;
+	void PrintInfo() const;
 private:
     std::vector<Vector> m_Points, m_Edges;
     Vector m_Normal;

@@ -7,8 +7,16 @@
 #include "Scene.h"
 #include "Plane.h"
 #include "Triangle.h"
+#include "ObjLoader.h"
 
 int main()
+{
+	vzl::ObjLoader loader{ "res/tri.obj", { 1.0, 0.0, 0.0, 1.0 } };
+
+	return 0;
+}
+
+int main2()
 {
 	/*objects*/
 	vzl::Sphere aSphere{ { 1.1, 1.25, 7. }, 1.0, {0.5, 0.5, 1.0, 1.0} };

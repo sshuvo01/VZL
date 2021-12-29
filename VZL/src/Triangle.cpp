@@ -88,4 +88,13 @@ Color Triangle::Shade(const Vector& point, const Light& light) const
     return GetColor() * light.GetColor() * reflectivity;
 }
 
+void Triangle::PrintInfo() const
+{
+	for (size_t i = 0; i < m_Points.size(); i++)
+	{
+		std::cout << "Vertex " << i << ": " << m_Points[i].X() << ", " << m_Points[i].Y() << ", " << m_Points[i].Z() << std::endl;
+	}
+	std::cout << "Color: " << m_Color.red() << ", " << m_Color.green() << ", " << m_Color.blue() << ", " << m_Color.alpha() << std::endl;
+}
+
 } // namespace vzl
