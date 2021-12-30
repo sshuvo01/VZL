@@ -8,7 +8,7 @@ namespace vzl
 
 
 Triangle::Triangle(const Vector& p0, const Vector& p1, const Vector& p2, const Color& color)
-    : ThingToHit(color), m_Points{ p0, p1, p2 }
+    : ThingToHit(color), m_Points{ p0, p1, p2 }, m_AABB{{}, {}}
 {
     CalculateProperties();
 }
@@ -27,6 +27,27 @@ void Triangle::CalculateProperties()
     double maxEdge = std::max( std::max( m_Edges[0].magnitude(), m_Edges[1].magnitude() ), m_Edges[2].magnitude() );
     double minEdge = std::min( std::min( m_Edges[0].magnitude(), m_Edges[1].magnitude() ), m_Edges[2].magnitude() );
     m_AspectRatio = maxEdge / minEdge;
+
+	CalculateAABB();
+}
+
+void Triangle::CalculateAABB()
+{
+	Vector llc = m_Points[0];
+	Vector urc = llc;
+
+	for (size_t i = 1; i < 3; i++)
+	{
+		llc[0] = std::min(llc[0], m_Points[i][0]); // x
+		llc[1] = std::min(llc[1], m_Points[i][1]); // y
+		llc[2] = std::min(llc[2], m_Points[i][2]); // z
+
+		urc[0] = std::max(urc[0], m_Points[i][0]);
+		urc[1] = std::max(urc[1], m_Points[i][1]);
+		urc[2] = std::max(urc[2], m_Points[i][2]);
+	}
+
+	m_AABB = { llc, urc };
 }
 
 
@@ -86,6 +107,11 @@ Color Triangle::Shade(const Vector& point, const Light& light) const
     //float reflectivity = std::max(m_Normal * lightDir, 0.0);
     float reflectivity = std::abs(m_Normal * lightDir);
     return GetColor() * light.GetColor() * reflectivity;
+}
+
+const AABB Triangle::aabb() const
+{
+	return m_AABB;
 }
 
 void Triangle::PrintInfo() const

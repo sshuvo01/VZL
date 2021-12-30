@@ -25,13 +25,16 @@ public:
 
     double Intersection(const Ray& theRay) const override;
     Color Shade(const Vector& point, const Light& light) const override;
+	const AABB aabb() const override;
 	void PrintInfo() const;
 private:
     std::vector<Vector> m_Points, m_Edges;
     Vector m_Normal;
     double m_Area, m_AspectRatio;
+	AABB m_AABB; 
     /*private functions*/
     void CalculateProperties();
+	void CalculateAABB();
 };
 
 

@@ -6,6 +6,7 @@
 #include <string>
 #include "Ray.h"
 #include "Scene.h"
+#include "TraceTree.h"
 
 namespace vzl
 {
@@ -22,8 +23,11 @@ public:
 	Image& operator=(const Image&& other) = delete;
 	~Image();
 
-	void CaptureAndWriteImage(const Scene& scene, const std::string& filename);
+	void CaptureAndWriteImage(const Scene& scene, const std::string& filepath) const;
+	void CaptureAndWriteImage(const std::vector<Light*>& lights, const TraceTree* theTree, const std::string& filepath) const;
 	void debugrgb();
+	inline void SetupCamera(const CameraSetting& camset) { m_Camera.SetupCamera(camset); }
+	inline const CameraSetting GetCameraSetting() const { return m_Camera.GetCameraSetting(); }
 private:
     Camera m_Camera;
 	unsigned int m_Width, m_Height, m_NrChannel;

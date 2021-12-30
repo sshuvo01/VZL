@@ -61,6 +61,9 @@ namespace vzl
 			}
 		}
 
+		stream.close();
+		
+		/*
 		for (int i = 0; i < triangleList.size(); i++)
 		{
 			triangleList[i].PrintInfo();
@@ -69,7 +72,7 @@ namespace vzl
 
 		std::cout << "Number of vertices: " << vertices.size() << std::endl;
 		std::cout << "Number of triangles: " << triangleList.size() << std::endl;
-		stream.close();
+		*/
 	}
 
 	std::vector<int> ObjLoader::GetIndices(const std::string& word) const

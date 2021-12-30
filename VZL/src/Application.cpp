@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-//#include "Ray.h"
 #include "Camera.h"
 #include "Image.h"
 #include "Sphere.h"
@@ -8,10 +7,61 @@
 #include "Plane.h"
 #include "Triangle.h"
 #include "ObjLoader.h"
+#include "TraceTree.h"
+
+
+static void PrintVector(const std::string& msg = "", const vzl::Vector& vec = {})
+{
+	std::cout << msg << vec.X() << ", " << vec.Y() << ", " << vec.Z() << std::endl;
+}
 
 int main()
 {
-	vzl::ObjLoader loader{ "res/tri.obj", { 1.0, 0.0, 0.0, 1.0 } };
+	vzl::ObjLoader loader{ "res/mesh.obj", { 1.0, 0.0, 0.0, 1.0 } };
+	vzl::Triangle triangle0{ {-1.8, 0.9, 5.0}, {-1.5, 0.6, 5.0}, {-1.7, 0.4, 5.0}, {245. / 255., 102. / 255., 0., 1.} };
+
+	if (loader.triangleList.size() == 0)
+	{
+		std::cout << "No triangle!" << std::endl;
+		return -1;
+	}
+
+	vzl::AABB aabb = loader.triangleList[0].aabb();
+
+	for (size_t i = 1; i < loader.triangleList.size(); i++)
+	{
+		aabb = aabb.Union(loader.triangleList[i].aabb());
+	}
+	
+	vzl::TraceTree myTraceTree = { aabb.LLC(), aabb.URC(), 1, 20, 1 };
+	
+	for (size_t i = 0; i < loader.triangleList.size(); i++)
+	{
+		vzl::ThingToHit* ttoh = dynamic_cast<vzl::ThingToHit*>(&loader.triangleList[i]);
+		if (!ttoh)
+		{
+			std::cout << "Failed to cast\n";
+			return -1;
+		}
+		myTraceTree.addObject(ttoh);
+	}
+
+	myTraceTree.Divide();
+
+	vzl::Light light1{ { -1.0, -1.0, 7.0 }, { 1.0, 1.0, 1.0, 1.0 } };
+	std::vector<vzl::Light*> lights;
+	lights.push_back(&light1);
+
+	unsigned int d = 2;
+	vzl::Image img{ 1920/d, 1080/d };
+	vzl::CameraSetting camset = img.GetCameraSetting();
+	camset.position = { 0.0, 0.0 , -10.0 };
+	img.SetupCamera(camset);
+
+	img.CaptureAndWriteImage(lights, &myTraceTree, "tree4.ppm");
+
+	//PrintVector("LLC: ", aabb.LLC());
+	//PrintVector("URC: ", aabb.URC());
 
 	return 0;
 }

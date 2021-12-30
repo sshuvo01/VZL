@@ -9,7 +9,37 @@
 
 namespace vzl
 {
+	class ThingToHit;
 
+	struct IntersectionData
+	{
+		double t = -1.0;
+		ThingToHit* geom = nullptr;
+	};
+
+	//
+	class AABB
+	{
+		// courtesy of Dr. Jerry Tessendorf
+	public:
+		AABB(const Vector& lc, const Vector& uc);
+		~AABB();
+
+		const bool intersects(const AABB& aabb) const;
+		AABB Intersection(const AABB& aabb) const;
+		AABB Union(const AABB& aabb) const;
+		void split(const int component, AABB& aabb1, AABB& aabb2) const;
+		const double volume() const;
+		const bool isInside(const Vector& P) const;
+		const double intersect(const Vector& start, const Vector& direction) const;
+
+		const Vector& LLC() const { return llc; }
+		const Vector& URC() const { return urc; }
+	private:
+		Vector llc;
+		Vector urc;
+	};
+	//
 
 	class ThingToHit
 	{
@@ -25,6 +55,7 @@ namespace vzl
 
 		inline void AddIgnoredLight(Light* light) { m_IgnoredLight.push_back(light); }
 		bool IsIgnoredLight(Light* light) const;
+		virtual const AABB aabb() const { return { {}, {} }; }
 
 	protected:
 		Color m_Color;
