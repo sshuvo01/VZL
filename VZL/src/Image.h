@@ -23,11 +23,12 @@ public:
 	Image& operator=(const Image&& other) = delete;
 	~Image();
 
-	void CaptureAndWriteImage(const Scene& scene, const std::string& filepath) const;
+	void CaptureAndWriteImage(const Scene& scene, const std::string& filepath, const Color& bgColor = {0.2, 0.2, 0.2, 1.0}) const;
 	void CaptureAndWriteImage(const std::vector<Light*>& lights, const TraceTree* theTree, const std::string& filepath) const;
 	void debugrgb();
 	inline void SetupCamera(const CameraSetting& camset) { m_Camera.SetupCamera(camset); }
 	inline const CameraSetting GetCameraSetting() const { return m_Camera.GetCameraSetting(); }
+	inline double GetAspectRatio() const { return static_cast<double>(m_Width) / static_cast<double>(m_Height); }
 private:
     Camera m_Camera;
 	unsigned int m_Width, m_Height, m_NrChannel;

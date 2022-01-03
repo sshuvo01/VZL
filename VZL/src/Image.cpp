@@ -28,7 +28,7 @@ namespace vzl
 		std::cout << msg << ": " << v[0] << ", " << v[1] << ", " << v[2] << std::endl;
 	}
 
-	void Image::CaptureAndWriteImage(const Scene& scene, const std::string& filepath) const
+	void Image::CaptureAndWriteImage(const Scene& scene, const std::string& filepath, const Color& bgColor) const
 	{
 		std::cout << "Writing Image " << filepath << " \n";
 		std::ofstream file(filepath);
@@ -53,7 +53,7 @@ namespace vzl
 
 				Ray theRay{ position, direction };
 
-				Color theColor = Trace(theRay, scene);
+				Color theColor = Trace(theRay, scene, bgColor);
             
 				int r = (int)(theColor.red() * 255.0);
 				int g = (int)(theColor.green() * 255.0);

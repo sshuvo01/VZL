@@ -8,7 +8,7 @@ namespace vzl
 
 
 
-double Sphere::Intersection(const Ray& theRay) const
+IntersectionData Sphere::Intersection(const Ray& theRay) const
 {
     Vector RmC = theRay.GetPosition() - m_Center;
     double temp = theRay.GetDirection() * RmC;
@@ -16,7 +16,7 @@ double Sphere::Intersection(const Ray& theRay) const
 
     if(f < 0.0)
     {
-        return -1.0;
+		return { -1.0, nullptr };
     }
 
     const double EPSILON = 0.0000001;
@@ -41,7 +41,7 @@ double Sphere::Intersection(const Ray& theRay) const
             }
             return -1.0;
         #endif
-        return -temp;
+			return { -temp, this };
     }
 
 
@@ -69,7 +69,7 @@ double Sphere::Intersection(const Ray& theRay) const
             else return -1.0;
         #endif
     }
-    return std::min( -temp + std::sqrt(f), -temp - std::sqrt(f) );
+	return { std::min(-temp + std::sqrt(f), -temp - std::sqrt(f)), this };
 }
 
 Color Sphere::Shade(const Vector& point, const Light& light) const

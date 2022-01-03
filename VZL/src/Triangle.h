@@ -23,7 +23,7 @@ public:
     inline const double GetArea() const { return m_Area; }
     inline const double GetAspectRatio() const { return m_AspectRatio; }
 
-    double Intersection(const Ray& theRay) const override;
+    IntersectionData Intersection(const Ray& theRay) const override;
     Color Shade(const Vector& point, const Light& light) const override;
 	const AABB aabb() const override;
 	void PrintInfo() const;

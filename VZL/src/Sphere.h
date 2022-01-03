@@ -14,7 +14,7 @@ public:
     Sphere(const Vector& center, double radius, const Color& color) 
         : ThingToHit(color), m_Center(center), m_Radius(radius) { }
     ~Sphere() { }
-    double Intersection(const Ray& theRay) const override;
+    IntersectionData Intersection(const Ray& theRay) const override;
     Color Shade(const Vector& point, const Light& light) const override;
     inline const Vector Center() const { return m_Center; }
     inline double radius() const { return m_Radius; }

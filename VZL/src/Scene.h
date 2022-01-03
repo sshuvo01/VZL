@@ -30,11 +30,12 @@ public:
     std::vector<Light*> m_SceneLights;
 };
 
-inline Color Trace(const Ray& theRay, const Scene& theScene)
+inline Color Trace(const Ray& theRay, const Scene& theScene, const Color& bgColor = { 0.2, 0.2, 0.2, 1.0 })
 {
     //std::cout << "number of objects: " << theScene.GetNbObjects()  << std::endl;
     double t = std::numeric_limits<double>::max();
     ThingToHit* nearestObjectHit = nullptr;
+	IntersectionData iData;
 
     for(size_t i = 0; i < theScene.GetNbObjects(); i++)
     {
@@ -43,12 +44,14 @@ inline Color Trace(const Ray& theRay, const Scene& theScene)
         if(anObject)
         {
             //std::cout << "aaaa\n";
-            double tHit =  anObject->Intersection(theRay);
+            IntersectionData id =  anObject->Intersection(theRay);
+            double tHit =  id.t;
             if(tHit > 0.0)
             {
                 if(tHit < t)
                 {
                     t = tHit;
+					iData = id;
                     nearestObjectHit = anObject;
                 }
             }
@@ -58,7 +61,7 @@ inline Color Trace(const Ray& theRay, const Scene& theScene)
     if(!nearestObjectHit)
     {
         // nothing was hit
-        return {0.0, 0.0, 0.0, 1.0};
+        return bgColor;
     }
 
     // compute the color!!!
@@ -71,7 +74,8 @@ inline Color Trace(const Ray& theRay, const Scene& theScene)
 
         if(nearestObjectHit->IsIgnoredLight(light)) continue;
 
-        finalColor += nearestObjectHit->Shade(hitPoint, *light);
+        //finalColor += nearestObjectHit->Shade(hitPoint, *light);
+		finalColor += iData.geom->Shade(hitPoint, *light);
     }
 
     return finalColor;

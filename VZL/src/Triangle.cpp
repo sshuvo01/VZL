@@ -51,7 +51,7 @@ void Triangle::CalculateAABB()
 }
 
 
-double Triangle::Intersection(const Ray& theRay) const
+IntersectionData Triangle::Intersection(const Ray& theRay) const
 {
     Vector e1 = m_Edges[0];
     Vector e2 = m_Edges[1];
@@ -63,7 +63,7 @@ double Triangle::Intersection(const Ray& theRay) const
 
     if(denom == 0.0)
     {
-        return -1.0;
+		return { -1.0, nullptr };
     }
 
     double numer = -(R0 - P0) * m_Normal;
@@ -71,7 +71,7 @@ double Triangle::Intersection(const Ray& theRay) const
 
     if(t < 0.0)
     {
-        return -1.0;
+		return { -1.0, nullptr };
     }
     
     Vector p = theRay.GetPosition() + t * theRay.GetDirection();
@@ -86,19 +86,19 @@ double Triangle::Intersection(const Ray& theRay) const
 
     if(u < 0.0 || u > 1.0)
     {
-        return -1.0;
+		return { -1.0, nullptr };
     }
     if(v < 0.0 || v > 1.0)
     {
-        return -1.0;
+		return { -1.0, nullptr };
     }
     double uv = u + v;
     if(uv < 0.0 || uv > 1.0)
     {
-        return -1.0;
+		return { -1.0, nullptr };
     }
-
-    return t;
+	
+	return { t, this };
 }
 
 Color Triangle::Shade(const Vector& point, const Light& light) const

@@ -9,7 +9,7 @@
 
 namespace vzl {
 
-	class TraceTree
+	class TraceTree : public ThingToHit
 	{
 	public:
 
@@ -20,6 +20,9 @@ namespace vzl {
 
 		void addObject(ThingToHit* o);
 		void addObjects(const std::vector<ThingToHit*>& o);
+
+		IntersectionData Intersection(const Ray& theRay) const override;
+		Color Shade(const Vector& point, const Light& light) const override;
 
 		const IntersectionData intersect(const Vector& start, const Vector& direction) const;
 

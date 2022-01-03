@@ -14,7 +14,7 @@ namespace vzl
 	struct IntersectionData
 	{
 		double t = -1.0;
-		ThingToHit* geom = nullptr;
+		const ThingToHit* geom = nullptr;
 	};
 
 	//
@@ -48,7 +48,7 @@ namespace vzl
 		ThingToHit(const Color& color) : m_Color(color) { }
 		virtual ~ThingToHit() { }
 
-		virtual double Intersection(const Ray& theRay) const = 0;
+		virtual IntersectionData Intersection(const Ray& theRay) const = 0;
 		virtual Color Shade(const Vector& point, const Light& light) const = 0;
 		inline Color GetColor() const { return m_Color; }
 		inline void SetColor(const Color& color) { m_Color = color; }

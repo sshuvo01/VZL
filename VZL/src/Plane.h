@@ -16,7 +16,7 @@ public:
         : ThingToHit(color), m_Normal(normal), m_PointOnPlane(point) { m_Normal.normalize(); }
     ~Plane() { }
 
-    double Intersection(const Ray& theRay) const override;
+    IntersectionData Intersection(const Ray& theRay) const override;
     Color Shade(const Vector& point, const Light& light) const override;
 private:
     Vector m_Normal;

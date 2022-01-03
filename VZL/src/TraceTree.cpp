@@ -10,7 +10,8 @@ namespace vzl
 		  node2(0),
 		  level(lvl),
 		  max_levels(maxlvl),
-		  min_objects(minobj)
+		  min_objects(minobj),
+		ThingToHit({1.0, 0.0, 0.0, 1.0})
 	{
 	}
 
@@ -30,6 +31,18 @@ namespace vzl
 		for (size_t i = 0; i < o.size(); i++) { object_list.push_back(o[i]); }
 	}
 
+	IntersectionData TraceTree::Intersection(const Ray & theRay) const
+	{
+		return intersect(theRay.GetPosition(), theRay.GetDirection());
+	}
+
+	Color TraceTree::Shade(const Vector & point, const Light & light) const
+	{
+		// don't call this function!
+		std::cout << "Warning!\n";
+		return Color();
+	}
+
 	const IntersectionData TraceTree::intersect(const Vector& start, const Vector& direction) const
 	{
 		IntersectionData hit;
@@ -40,7 +53,7 @@ namespace vzl
 				// leaf level.  Intesection against object_list and return results
 				for (size_t i = 0; i < object_list.size(); i++)
 				{
-					const double t = object_list[i]->Intersection({ start, direction });
+					const double t = object_list[i]->Intersection({ start, direction }).t;
 					if (t > 0.0)
 					{
 						if (hit.t < 0.0 || t < hit.t)

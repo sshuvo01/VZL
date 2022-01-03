@@ -18,7 +18,7 @@ static void PrintVector(const std::string& msg = "", const vzl::Vector& vec = {}
 int main()
 {
 	vzl::ObjLoader loader{ "res/mesh.obj", { 1.0, 0.0, 0.0, 1.0 } };
-	vzl::Triangle triangle0{ {-1.8, 0.9, 5.0}, {-1.5, 0.6, 5.0}, {-1.7, 0.4, 5.0}, {245. / 255., 102. / 255., 0., 1.} };
+	//vzl::Triangle triangle0{ {-1.8, 0.9, 5.0}, {-1.5, 0.6, 5.0}, {-1.7, 0.4, 5.0}, {245. / 255., 102. / 255., 0., 1.} };
 
 	if (loader.triangleList.size() == 0)
 	{
@@ -48,20 +48,32 @@ int main()
 
 	myTraceTree.Divide();
 
-	vzl::Light light1{ { -1.0, -1.0, 7.0 }, { 1.0, 1.0, 1.0, 1.0 } };
-	std::vector<vzl::Light*> lights;
-	lights.push_back(&light1);
+	vzl::Light light1{ { -3.0, -1.0, 2.0 }, { 1.0, 1.0, 1.0, 1.0 } };
 
-	unsigned int d = 2;
+	unsigned int d = 1;
 	vzl::Image img{ 1920/d, 1080/d };
 	vzl::CameraSetting camset = img.GetCameraSetting();
+	camset.aspectRatio = img.GetAspectRatio();
 	camset.position = { 0.0, 0.0 , -10.0 };
 	img.SetupCamera(camset);
 
-	img.CaptureAndWriteImage(lights, &myTraceTree, "tree4.ppm");
+	vzl::Scene theScene;
+	theScene.AddLight(&light1);
+	
+	theScene.AddObject(&myTraceTree);
+	
+	vzl::Sphere aSphere{ { 1.1, 1.25, 7.0 }, 1.0, {0.5, 0.5, 1.0, 1.0} };
+	vzl::Sphere aSphere2{ { -1.1, -1.25, 6.0 }, 1.2, {0.0, 1.0, 1.0, 1.0} };
+	vzl::Sphere aSphere3{ { 3.1, -1.25, 6.0 }, 1.5, {0.2, 0.4, 1.0, 1.0} };
+	vzl::Sphere aSphere4{ { 6.1, 1.25, 5.0 }, 1.5, {0.2, 0.4, 1.0, 1.0} };
+	
+	theScene.AddObject(&aSphere);
+	theScene.AddObject(&aSphere2);
+	theScene.AddObject(&aSphere3);
+	theScene.AddObject(&aSphere4);
 
-	//PrintVector("LLC: ", aabb.LLC());
-	//PrintVector("URC: ", aabb.URC());
+	vzl::Color backgroundColor{ 0.2, 0.22, 0.1, 1.0 };
+	img.CaptureAndWriteImage(theScene, "test7.ppm", backgroundColor);
 
 	return 0;
 }
@@ -105,7 +117,7 @@ int main2()
 
 	unsigned int d = 1;
 	vzl::Image img{ 1024 / d, 768 / d };
-	img.CaptureAndWriteImage(theScene, "output.ppm");
+	img.CaptureAndWriteImage(theScene, "lal.ppm");
 
 
 	std::cin.get();
