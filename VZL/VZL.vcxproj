@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Color.h" />
+    <ClInclude Include="src\Date.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\ObjLoader.h" />

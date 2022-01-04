@@ -1,5 +1,11 @@
+#define _CRT_OBSOLETE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <ctime>
+#include <algorithm>
+#include "Date.h"
 #include "Camera.h"
 #include "Image.h"
 #include "Sphere.h"
@@ -9,16 +15,30 @@
 #include "ObjLoader.h"
 #include "TraceTree.h"
 
-
 static void PrintVector(const std::string& msg = "", const vzl::Vector& vec = {})
 {
 	std::cout << msg << vec.X() << ", " << vec.Y() << ", " << vec.Z() << std::endl;
 }
 
+static const std::string GetDateTime()
+{
+	auto start = std::chrono::system_clock::now();
+	auto end = std::chrono::system_clock::now();
+
+	std::chrono::duration<double> elapsed_seconds = end - start;
+	std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+	std::string datetime = std::ctime(&end_time);
+	datetime.erase(datetime.end() - 1);
+
+	std::replace(datetime.begin(), datetime.end(), ':', '_');
+	std::replace(datetime.begin(), datetime.end(), ' ', '_');
+	return datetime;
+}
+
 int main()
 {
 	vzl::ObjLoader loader{ "res/mesh.obj", { 1.0, 0.0, 0.0, 1.0 } };
-	//vzl::Triangle triangle0{ {-1.8, 0.9, 5.0}, {-1.5, 0.6, 5.0}, {-1.7, 0.4, 5.0}, {245. / 255., 102. / 255., 0., 1.} };
 
 	if (loader.triangleList.size() == 0)
 	{
@@ -72,8 +92,12 @@ int main()
 	theScene.AddObject(&aSphere3);
 	theScene.AddObject(&aSphere4);
 
+	//
+	std::string foldername = "res/outputimg/"; 
+	std::string appendname = "test";
+	std::string filename = foldername + GetDateTime() + "_" + appendname + ".ppm";
 	vzl::Color backgroundColor{ 0.2, 0.22, 0.1, 1.0 };
-	img.CaptureAndWriteImage(theScene, "test7.ppm", backgroundColor);
+	img.CaptureAndWriteImage(theScene, filename, backgroundColor);
 
 	return 0;
 }

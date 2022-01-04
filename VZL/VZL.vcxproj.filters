@@ -92,5 +92,8 @@
     <ClInclude Include="src\TraceTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Date.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

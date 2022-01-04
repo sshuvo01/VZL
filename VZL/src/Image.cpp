@@ -36,6 +36,7 @@ namespace vzl
 		if (!file.is_open())
 		{
 			std::cout << "Failed to open the output file " << filepath << "\n";
+			return;
 		}
 
 		file << "P3\n" << m_Width << " " << m_Height << "\n255\n";
